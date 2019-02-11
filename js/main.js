@@ -1,3 +1,4 @@
+let idnum = 2;
 const app = new Vue({
     el: '#app',
     data: {
@@ -11,15 +12,20 @@ const app = new Vue({
         // 使用するメソッド
         doAdd: function (event, value) {
             var name = this.$refs.name;
-            if(!name.value.length){
+            if (!name.value.length) {
                 return;
             }
             this.locations.push({
-                id: this.locations.length,
+                id: idnum,
                 name: name.value,
                 time: 30
             });
+            idnum++;
             name.value = '';
+        },
+        doRemove: function (item) {
+            var index = this.locations.indexOf(item.value)
+            this.locations.splice(index, 1)
         }
     }
 })
