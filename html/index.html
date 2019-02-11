@@ -9,10 +9,19 @@
 </head>
 
 <body>
-<div id="app">
-
-</div>
+    <div id="app" class="uk-container-expand">
+        <div class="uk-card uk-card-default uk-card-hover uk-card-body" id="card" uk-grid v-for="item in locations"
+            v-bind:key="item.id">
+            <h3 class="uk-width-4-5" id="name">{{ item.name }}</h3>
+            <input class="uk-input staymin uk-width-1-5" type="text" placeholder="Input" id="time" value="30" v-model="item.time">
+        </div>
+        <form class="uk-container-expand" v-on:submit.prevent="doAdd" uk-grid>
+            <input class="uk-input uk-width-4-5" type="text" placeholder="Input" ref="name">
+            <button class="uk-button uk-button-default uk-width-1-5" type="submit">追加</button>
+        </form>
+    </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 <script src="../js/main.js"></script>
+
 </html>
