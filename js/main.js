@@ -8,18 +8,12 @@ const app = new Vue({
                 { id: 0, name: "京都", time: 30 },
                 { id: 1, name: "大阪", time: 30 }
             ],
-            // 変更前の地点の情報
-            oldLocations: [],
             transitTime: {},
             startTime: 9,
             endTime: "終了時間"
         }
     },
     methods: {
-        // 変更前の配列を保持
-        setValue: function() {
-            this.oldLocations = _.cloneDeep(this.locations);
-          },
         // 地点の追加
         doAdd: function (event, value) {
             var name = this.$refs.name;
@@ -33,6 +27,7 @@ const app = new Vue({
             });
             idnum++;
             name.value = '';
+            calcTransitTime();
         },
         // 地点の削除
         doRemove: function (item) {
@@ -41,30 +36,7 @@ const app = new Vue({
         },
         changeTime: function(item){
             console.log('change');
-        }
-    },
-    mounted(){
-        this.setValue();
-    },
-    watch: {
-        // 地点の滞在時間の変更
-        locations: {
-            handler(newVal, oldVal) {
-                oldVal = this.oldLocations;
-                this.setValue();
-
-                // 要素の追加だろう
-                if(oldVal.length != newVal.length){
-                    console.log(oldVal.length);
-                    calcTransitTime();
-                }else{
-                    calcTime();
-                }
-
-                console.log('更新前のネストされたデータ：' + JSON.stringify(oldVal));
-                console.log('更新後のネストされたデータ：' + JSON.stringify(newVal));
-            },
-            deep: true
+            calcTime();
         }
     }
 });
@@ -79,7 +51,7 @@ function calcTime() {
     
     for(let key in Object.keys(app.transitTime)){
         console.log(key);
-        if(app.transitTime[key].time == undefined){
+        if(app.transitTime[key] == undefined){
             break;
         }
         sumtime += parseInt(app.transitTime[key].time);
