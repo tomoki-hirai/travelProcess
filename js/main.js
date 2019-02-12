@@ -105,3 +105,67 @@ function getGoogleMap(originName, destinationName) {
         }
     });
 }
+function reqListener () {
+    console.log(this.responseText);
+  }
+$(function(){
+    var param = 'key=AIzaSyAgSs7fjrKUT1qr7vGYULTMaip0dRj31y8' + '&origin=' + encodeURIComponent('kyoto') + '&destination=' + encodeURIComponent('tokyo');
+    var url = 'https://maps.googleapis.com/maps/api/directions/json?' + param;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.addEventListener('load', reqListener);
+    xhr.send(null);
+    // function start() {
+    //     // 2. Initialize the JavaScript client library.
+    //     gapi.client.init({
+    //       'apiKey': 'AIzaSyAgSs7fjrKUT1qr7vGYULTMaip0dRj31y8',
+    //       // clientId and scope are optional if auth is not required.
+    //     //   'clientId': 'YOUR_WEB_CLIENT_ID.apps.googleusercontent.com',
+    //     //   'scope': 'profile',
+    //     }).then(function() {
+    //       // 3. Initialize and make the API request.
+    //       return gapi.client.request({
+    //         'path': 'https://maps.googleapis.com/maps/api/directions/json',
+    //         'params': {
+    //                         origin: 'kyoto',
+    //                         destination: 'tokyo',
+    //                         key: 'AIzaSyAgSs7fjrKUT1qr7vGYULTMaip0dRj31y8',
+    //                         sortOrder: 'LAST_NAME_ASCENDING'
+    //                     },
+    //       })
+    //     }).then(function(response) {
+    //       console.log(response.result);
+    //     }, function(reason) {
+    //       console.log('Error: ' + reason.result.error.message);
+    //     });
+    //   };
+    //   // 1. Load the JavaScript client library.
+    //   gapi.load('client', start);
+    // gapi.load('client', {
+    //     callback: function() {
+    //       // Handle gapi.client initialization.
+    //       var restRequest = gapi.client.request({
+    //         'path': 'https://maps.googleapis.com/maps/api/directions/json',
+    //         'params': {
+    //             origin: 'kyoto',
+    //             destination: 'tokyo',
+    //             key: 'AIzaSyAgSs7fjrKUT1qr7vGYULTMaip0dRj31y8'
+    //         }
+    //       });
+    //       console.log(restRequest);
+    //       restRequest.execute(logResults)
+    //     },
+    //     onerror: function() {
+    //       // Handle loading error.
+    //       alert('gapi.client failed to load!');
+    //     },
+    //     timeout: 5000, // 5 seconds.
+    //     ontimeout: function() {
+    //       // Handle timeout.
+    //       alert('gapi.client could not load in a timely manner!');
+    //     }
+    //   });
+});
+function logResults(json,raw){
+    console.log(json);
+  }
