@@ -47,11 +47,20 @@ const app = new Vue({
             handler (newVal, oldVal) {
                 console.log('更新前のネストされたデータ：' + JSON.stringify(oldVal));
                 console.log('更新後のネストされたデータ：' + JSON.stringify(newVal));
+                calcTime();
             },
             deep: true
         }
     }
 });
+
+function calcTime(){
+    let sumtime = 0;
+    for(let i=0;i<app.locations.length;i++){
+        sumtime += parseInt(app.locations[i].time);
+    }
+    console.log(sumtime);
+}
 
 console.log(app.locations);
 
