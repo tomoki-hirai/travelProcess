@@ -33,6 +33,7 @@ const app = new Vue({
         doRemove: function (item) {
             var index = this.locations.indexOf(item.value);
             this.locations.splice(index, 1);
+            calcTransitTime();
         },
         changeTime: function(item){
             console.log('change');
@@ -48,18 +49,16 @@ function calcTime() {
         sumtime += parseInt(app.locations[i].time);
     }
     // 移動時間
-    
-    for(let key in Object.keys(app.transitTime)){
-        console.log(key);
+    for(let key in app.transitTime){
         if(app.transitTime[key] == undefined){
-            break;
+            continue;
         }
         sumtime += parseInt(app.transitTime[key].time);
     }
     console.log(sumtime);
     
     let hour = app.startTime + parseInt(sumtime/60);
-    let minute = sumtime - (hour-app.startTime)*60;
+    let minute = sumtime%60;
     console.log(hour + ',' + minute);
 
     let hourStr = ( '00' + hour ).slice( -2 );
@@ -69,6 +68,7 @@ function calcTime() {
 }
 
 function calcTransitTime(){
+    app.transitTime = {};
     if(app.locations.length>=2){
         for(let i=0;i<app.locations.length-1;i++){
             doget(app.locations[i],app.locations[i+1]);
