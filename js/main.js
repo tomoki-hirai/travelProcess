@@ -10,7 +10,9 @@ const app = new Vue({
             ],
             // 変更前の地点の情報
             oldLocations: [],
-            transitTime: []
+            transitTime: {},
+            startTime: 9,
+            endTime: "終了時間"
         }
     },
     methods: {
@@ -36,6 +38,9 @@ const app = new Vue({
         doRemove: function (item) {
             var index = this.locations.indexOf(item.value);
             this.locations.splice(index, 1);
+        },
+        changeTime: function(item){
+            console.log('change');
         }
     },
     mounted(){
@@ -52,11 +57,12 @@ const app = new Vue({
                 if(oldVal.length != newVal.length){
                     console.log(oldVal.length);
                     calcTransitTime();
+                }else{
+                    calcTime();
                 }
 
                 console.log('更新前のネストされたデータ：' + JSON.stringify(oldVal));
                 console.log('更新後のネストされたデータ：' + JSON.stringify(newVal));
-                calcTime();
             },
             deep: true
         }
@@ -65,16 +71,35 @@ const app = new Vue({
 
 function calcTime() {
     let sumtime = 0;
+    // 滞在時間
     for (let i = 0; i < app.locations.length; i++) {
         sumtime += parseInt(app.locations[i].time);
     }
+    // 移動時間
+    
+    for(let key in Object.keys(app.transitTime)){
+        console.log(key);
+        if(app.transitTime[key].time == undefined){
+            break;
+        }
+        sumtime += parseInt(app.transitTime[key].time);
+    }
     console.log(sumtime);
+    
+    let hour = app.startTime + parseInt(sumtime/60);
+    let minute = sumtime - (hour-app.startTime)*60;
+    console.log(hour + ',' + minute);
+
+    let hourStr = ( '00' + hour ).slice( -2 );
+    let minuteStr = ( '00' + minute ).slice( -2 );
+
+    app.endTime = hourStr + ':' + minuteStr;
 }
 
 function calcTransitTime(){
     if(app.locations.length>=2){
         for(let i=0;i<app.locations.length-1;i++){
-            doget(app.locations[0],app.locations[1])
+            doget(app.locations[i],app.locations[i+1]);
         }
     }
 }
@@ -84,8 +109,12 @@ function doget(origin,destination) {
     getGoogleMap(origin.name, destination.name).done(function (result) {
         console.log('end');
         let min = result.routes[0].legs[0].duration.value / 60;
+        let text = result.routes[0].legs[0].duration.text;
         console.log(result.routes[0].legs[0].duration.value);
-        // alert('所要時間は' + min + '分です');
+        app.$set(app.transitTime,String(origin.id),{id: origin.id , origin: origin.name, destination: destination.name,time: min,text: text});
+        console.log(app.transitTime);
+
+        calcTime();
     }).fail(function (result) {
         console.log(result);
     });
