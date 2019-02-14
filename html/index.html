@@ -10,34 +10,34 @@
 </head>
 
 <body>
-    <div id="main" class="uk-container-expand" uk-grid>
-        <div class="uk-width-1-2@m">
+    <div id="main" class="uk-container-expand uk-child-width-1-2" uk-grid>
+        <div>
             <div id="map" style="position: relative; overflow: hidden; height: 100%" 　class="uk-container-expand">
-                <div style="height: 100%; width: 100%; position: absolute; top: 0px; left: 0px; background-color: rgb(229, 227, 223);"></div>
+                <div
+                    style="height: 100%; width: 100%; position: absolute; top: 0px; left: 0px; background-color: rgb(229, 227, 223);">
+                </div>
             </div>
         </div>
-        <div class="uk-width-1-2@m uk-margin-small-top">
-            <div id="app" class="uk-container-expand">
-                <form class="uk-container-expand" v-on:submit.prevent="doAdd" uk-grid>
-                    <input class="uk-input uk-width-4-5" type="text" placeholder="Input" ref="name">
-                    <button class="uk-button uk-button-default uk-width-1-5" type="submit">追加</button>
-                </form>
-                <div class="uk-container-expand" uk-grid>
-                    <p class="uk-width-auto">開始時間</p>
-                    <input class="uk-input uk-width-expand" type="text" placeholder="Input" v-model="startTime">
-                </div>
-                <div v-for="item in locations" v-bind:key="item.id">
-                    <div class="uk-card uk-card-default uk-card-hover uk-card-body" uk-grid>
-                        <h3 class="uk-width-expand" id="name">{{ item.name }}</h3>
-                        <input class="uk-input staymin uk-width-auto" type="text" placeholder="Input" id="time" value="30"
-                            v-model="item.time" v-on:keyup="changeTime(item)">
-                        <button uk-icon="icon: trash" v-on:click="doRemove(item)"></button>
-                    </div>
-                    <p v-if="transitTime[item.id] != undefined">{{ transitTime[item.id].text }}</p>
-                    <p v-else></p>
-                </div>
-                <p>{{endTime}}</p>
+        <div id="app" class="uk-container-expand" style="height:100%;overflow:auto;">
+            <form class="uk-container-expand" v-on:submit.prevent="doAdd" uk-grid>
+                <input class="uk-input uk-width-4-5" type="text" placeholder="Input" ref="name">
+                <button class="uk-button uk-button-default uk-width-1-5" type="submit">追加</button>
+            </form>
+            <div class="uk-container-expand" uk-grid>
+                <p class="uk-width-auto">開始時間</p>
+                <input class="uk-input uk-width-expand" type="text" placeholder="Input" v-model="startTime" v-on:keyup="changeTime()">
             </div>
+            <div v-for="item in locations" v-bind:key="item.id">
+                <div class="uk-card uk-card-default uk-card-hover uk-card-body" uk-grid>
+                    <h3 class="uk-width-expand" id="name">{{ item.name }}</h3>
+                    <input class="uk-input staymin uk-width-auto" type="text" placeholder="Input" id="time" value="30"
+                        v-model="item.time" v-on:keyup="changeTime()">
+                    <button uk-icon="icon: trash" v-on:click="doRemove(item)"></button>
+                </div>
+                <p v-if="transitTime[item.id] != undefined">{{ transitTime[item.id].text }}</p>
+                <p v-else></p>
+            </div>
+            <p>{{endTime}}</p>
         </div>
     </div>
 
